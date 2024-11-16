@@ -2,10 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Flask App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Date</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Welcome to My Flask App!</h1>
-    <p>This is a simple websdasite with a front end and back end.</p>
+    <div class="container">
+        <h1>Utre moze da mi napravis proja? </h1>
+        <div class="button-container">
+            <button id="yes-button" class="button">YES</button>
+            <button id="no-button" class="button">NO</button>
+        </div>
+    </div>
+    <div id="hearts-container"></div>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
