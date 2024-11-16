@@ -14,8 +14,8 @@ function moveNoButton() {
     }
 
     // Calculate random positions within the viewport boundaries
-    const maxX = window.innerWidth - noButton.offsetWidth;
-    const maxY = window.innerHeight - noButton.offsetHeight;
+    const maxX = window.innerWidth - noButton.offsetWidth - 20; // Leave some margin
+    const maxY = window.innerHeight - noButton.offsetHeight - 20; // Leave some margin
 
     const randomX = Math.floor(Math.random() * maxX);
     const randomY = Math.floor(Math.random() * maxY);
@@ -23,7 +23,17 @@ function moveNoButton() {
     // Update the position of the 'No' button
     noButton.style.left = `${randomX}px`;
     noButton.style.top = `${randomY}px`;
+
+    // Prevent the button from going off-screen
+    if (randomX < 0 || randomY < 0 || randomX > maxX || randomY > maxY) {
+        noButton.style.left = "50%";
+        noButton.style.top = "50%";
+    }
 }
+
+// Event listener for both hover (desktop) and touch (mobile)
+noButton.addEventListener("mouseover", moveNoButton); // For desktop
+noButton.addEventListener("touchstart", moveNoButton); // For mobile
 
 // Attach event listener for 'No' button to move on hover
 noButton.addEventListener("mouseover", () => {
@@ -34,7 +44,7 @@ noButton.addEventListener("mouseover", () => {
 yesButton.addEventListener("click", () => {
     // Update the container to display the desired message
     document.querySelector(".container").innerHTML = `
-        <h1 class="thank-you-message">Фала тии мамо  ❤️</h1>
+        <h1 class="thank-you-message">Huh knew you would click yes LY ❤️</h1>
     `;
     createHearts();
 });
