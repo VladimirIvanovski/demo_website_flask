@@ -7,4 +7,5 @@ def home():
     return render_template('home.html')
 
 if __name__ == '__main__':
+    #sd
     app.run(debug=True)
