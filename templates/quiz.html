@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Quiz</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f4f1ea;
+            color: #5b4636;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Main Quiz Container */
+        #quiz-container {
+            background: #fffbe6;
+            border: 2px solid #a67c52;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            color: #5b4636;
+        }
+
+        /* Progress Bar */
+        #progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #6b8e23;
+            transition: width 0.3s ease;
+        }
+
+        /* Styling Each Question */
+        .question {
+            margin-bottom: 25px;
+        }
+
+        .question h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #4a3520;
+            text-align: center;
+        }
+
+        /* Options Container */
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Option Buttons */
+        .option {
+            display: block;
+            margin: 8px 0;
+            padding: 15px 20px;
+            border: 2px solid #c9b79c;
+            border-radius: 8px;
+            background-color: #fffaf0;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* Hover Effect */
+        .option:hover {
+            background-color: #e9ddc7;
+        }
+
+        /* Correct Answer */
+        .option.correct {
+            background-color: #6b8e23;
+            color: #fff;
+            border-color: #556b2f;
+            pointer-events: none;
+        }
+
+        /* Wrong Answer */
+        .option.wrong {
+            background-color: #b22222;
+            color: #fff;
+            border-color: #8b0000;
+            pointer-events: none;
+        }
+
+        /* Styling Explanation */
+        .explanation {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #5b4636;
+            background-color: #fdf7e2;
+            border-left: 4px solid #a67c52;
+            padding: 10px;
+        }
+
+        /* Result Display */
+        #result {
+            display: none;
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Historical Quiz</h1>
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+        {% for question in questions %}
+        <div class="question" data-answer="{{ question.answer }}" style="display: none;">
+            <h3>{{ question.question }}</h3>
+            <div class="options">
+                {% for option in question.options %}
+                <div class="option">{{ option }}</div>
+                {% endfor %}
+            </div>
+            <div class="explanation" style="display: none;">
+                <strong>Explanation:</strong> {{ question.explanation }}
+            </div>
+        </div>
+        {% endfor %}
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const questions = document.querySelectorAll('.question');
+            let currentQuestion = 0;
+            let score = 0;
+
+            const progressBarFill = document.getElementById('progress-fill');
+            const resultDiv = document.getElementById('result');
+
+            function showQuestion(index) {
+                if (index < questions.length) {
+                    questions[index].style.display = 'block';
+                }
+            }
+
+            function updateProgressBar() {
+                const progressPercentage = ((currentQuestion) / questions.length) * 100;
+                progressBarFill.style.width = progressPercentage + '%';
+            }
+
+            function showResult() {
+                resultDiv.style.display = 'block';
+                resultDiv.textContent = 'You scored ' + score + ' out of ' + questions.length + '!';
+            }
+
+            function handleOptionClick(event) {
+                const question = questions[currentQuestion];
+                const correctAnswer = question.dataset.answer;
+                const options = question.querySelectorAll('.option');
+                const explanation = question.querySelector('.explanation');
+
+                if (event.target.textContent === correctAnswer) {
+                    event.target.classList.add('correct');
+                    score++;
+                } else {
+                    event.target.classList.add('wrong');
+                    options.forEach(opt => {
+                        if (opt.textContent === correctAnswer) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                }
+
+                if (explanation) explanation.style.display = 'block';
+
+                // Disable all options
+                options.forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+
+                currentQuestion++;
+                updateProgressBar();
+
+                // Move to next question after a delay
+                setTimeout(() => {
+                    question.style.display = 'none';
+                    if (currentQuestion < questions.length) {
+                        showQuestion(currentQuestion);
+                    } else {
+                        showResult();
+                    }
+                }, 2000);
+            }
+
+            // Initialize quiz
+            showQuestion(currentQuestion);
+            updateProgressBar();
+
+            // Add event listeners to options
+            questions.forEach(question => {
+                const options = question.querySelectorAll('.option');
+                options.forEach(option => {
+                    option.addEventListener('click', handleOptionClick);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
