@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll - Select Your Grade</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            text-align: center;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 20px;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .grade-selection, .book-selection {
+            margin: 20px auto;
+            max-width: 800px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Select Your Grade and Book</h1>
+    </header>
+    <main>
+        <h2>Select Your Grade</h2>
+        <div class="grade-selection">
+            <div class="card" onclick="selectGrade('1')">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa7cRALts3tnhRNlgzm7bConBCCXZUsuDOCw&s" alt="Grade 1">
+                <h3>Grade 1</h3>
+            </div>
+            <div class="card" onclick="selectGrade('2')">
+                <img src="https://img.freepik.com/free-vector/two-kids-with-number-two-cartoon_1308-105875.jpg" alt="Grade 2">
+                <h3>Grade 2</h3>
+            </div>
+            <div class="card" onclick="selectGrade('3')">
+                <img src="https://img.freepik.com/free-vector/three-kids-with-number-three-cartoon_1308-101574.jpg" alt="Grade 3">
+                <h3>Grade 3</h3>
+            </div>
+        </div>
+        <h2>Select Your Book</h2>
+        <div class="book-selection" id="book-selection">
+            <!-- Books will be displayed here after selecting a grade -->
+        </div>
+    </main>
+    <script>
+        let selectedGrade = '';
+
+        function selectGrade(grade) {
+            selectedGrade = grade;
+            const bookSelection = document.getElementById('book-selection');
+
+            // Example book data for demonstration
+            const books = [
+                { title: 'Math Book', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM5feGAGEJ3DMLSCLG-xhp1Ku3AFU25b2zxg&s' },
+                { title: 'Science Book', image: 'https://static.vecteezy.com/system/resources/thumbnails/045/546/919/small_2x/groovy-back-to-school-clipart-science-book-illustration-in-trendy-retro-y2k-style-png.png' },
+                { title: 'History Book', image: 'https://static.vecteezy.com/system/resources/previews/003/344/095/non_2x/isolated-element-back-to-school-history-book-free-vector.jpg' }
+            ];
+
+            bookSelection.innerHTML = books.map(book => `
+                <div class="card" onclick="selectBook('${book.title}')">
+                    <img src="${book.image}" alt="${book.title}">
+                    <h3>${book.title}</h3>
+                </div>
+            `).join('');
+        }
+
+        function selectBook(book) {
+            if (!selectedGrade) {
+                alert('Please select a grade first!');
+                return;
+            }
+            window.location.href = `/quiz/${selectedGrade}/${encodeURIComponent(book)}`;
+        }
+    </script>
+</body>
+</html>
